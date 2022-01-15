@@ -1,9 +1,12 @@
+#loading the required packages
 library(data.table)
 library(dplyr)
 
+#changing directory to read files
 olddir <- getwd()
 setwd("UCI HAR Dataset")
 
+#reading datasets
 featureNames <- fread("features.txt")
 featureNames <- featureNames$V2
 
@@ -19,12 +22,20 @@ SubTest <- fread("test/subject_test.txt")
 
 DfTest <- cbind(SubTest,YTest,XTest)
 
+#Merging the train and test sets
 DfMerged <- rbind(DfTrain,DfTest)
+
+#Labelling the variables
 colnames(DfMerged) <- c("Subject","Activity",featureNames)
+
+#Selecting the mean and std readings from variables
 colIdx <- grep("mean|std",colnames(DfMerged))
 DfMnSd <- select(DfMerged,1,2,colIdx)
 
+#Renaming the variables to remove hyphens, paranthesis
 colnames(DfMnSd) <- gsub("-|\\()","",colnames(DfMnSd))
+
+#Naming the activities
 DfMnSd <- mutate(DfMnSd,Activity = recode(Activity,'1' = "WALKING",
                                            '2' = "WALKING_UPSTAIRS",
                                            '3' = "WALKING_DOWNSTAIRS",
@@ -33,10 +44,13 @@ DfMnSd <- mutate(DfMnSd,Activity = recode(Activity,'1' = "WALKING",
                                            '6' = "LAYING"))
 
 
+#Taking the mean and std of the selected variables for each subject and activity
 DfMnSd <- group_by(DfMnSd,Subject,Activity)
 TidyData <- summarise(DfMnSd,across(everything(),
                                     list(mean = mean,sd = sd)))
 
+#going back to the original directory
 setwd(olddir)
 
+#writing the tidy data onto a file
 fwrite(TidyData,file = "TidyData.csv")
