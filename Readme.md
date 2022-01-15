@@ -14,4 +14,4 @@ The packages *dplyr* and *data.table* must be installed for the script to run.
 
 ### Reading the tidy dataset
 
-The script writes the tidy data onto a csv file "TidyData.csv". This file has also been included in the repo. To read the csv file use *fread()* from *data.table* package, only the filename argument has to be given.
+The script writes the tidy data onto a text file "TidyData.txt". This file has also been included in the repo. To read the txt file use *fread()* from *data.table* package, only the filename argument has to be given.

@@ -53,4 +53,4 @@ TidyData <- summarise(DfMnSd,across(everything(),
 setwd(olddir)
 
 #writing the tidy data onto a file
-fwrite(TidyData,file = "TidyData.csv")
+write.table(TidyData,file = "TidyData.txt",row.names = F)
